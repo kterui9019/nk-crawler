@@ -1,4 +1,3 @@
-import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 import { fetchDom } from "./util.ts";
 import { selectors } from "./selectors.ts";
 

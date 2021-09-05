@@ -15,6 +15,6 @@ Deno.test("指定した年月からレース開催日を取得できる", async 
 });
 
 Deno.test("2008年以前のレースは取得できない", () => {
-  const fn = async () => procedure("2007", "12");
+  const fn = async () => await procedure("2007", "12");
   assertThrowsAsync<string[]>(fn, Error);
 });
