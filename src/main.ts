@@ -17,6 +17,7 @@ const writeHorseDataCsv = async (
   await writeCSV(f, csv);
   f.close();
 };
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 if (Deno.args.length !== 2) {
   throw new Error(
@@ -34,9 +35,11 @@ const raceIds =
     eventDates.map(async (eventDate) => await racelistProcedure(eventDate)),
   )).flat(2);
 
-raceIds.forEach(async (raceId) => {
-  if (!raceId) return;
+for(const id of raceIds) {
+	if (!id) continue;
 
-  const result = await resultProcedure(raceId);
-  writeHorseDataCsv(`${year}${month}`, raceId, result);
-});
+	console.log(`processing raceId: ${id}`)
+	const result = await resultProcedure(id);
+  writeHorseDataCsv(`${year}${month}`, id, result);
+	await sleep(500);
+}
