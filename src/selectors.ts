@@ -4,6 +4,13 @@ export const selectors = {
     cols: (row: number) =>
       `#All_Result_Table > tbody > tr:nth-child(${row + 1}) > td`,
     header: () => "#All_Result_Table > thead > tr > th",
+    raceName: () =>
+      "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceName",
+    raceDate: () => "#RaceList_DateList > dd.Active > a",
+    raceData1: () =>
+      "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceData01",
+    raceData2: () =>
+      "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceData02",
   },
   calendar: {
     eventDateAnchors: () =>

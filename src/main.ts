@@ -1,7 +1,8 @@
 import { procedure as racelistProcedure } from "./racelist.ts";
 import { procedure as calendarProcedure } from "./calendar.ts";
 import {
-  header as raceResultHeader,
+  raceResultHeader,
+  raceHeader,
   procedure as resultProcedure,
 } from "./result.ts";
 import { CSVWriter } from "https://deno.land/x/csv@v0.5.1/mod.ts";
@@ -38,23 +39,36 @@ const raceIds = (await Promise.all(
   eventDates.map(async (eventDate) => await racelistProcedure(eventDate)),
 )).flat(2);
 
-// file書き込み準備
-const f = await Deno.open("./out/raceResult.csv", {
+const openOption = {
   write: true,
   create: true,
   truncate: true,
-});
-const writer = new CSVWriter(f, {
+}
+
+const csvOption = {
   columnSeparator: ",",
   lineSeparator: "\r\n",
-});
-writeHorseDataCsv(writer, raceResultHeader);
+}
+// file書き込み準備
+const raceF = await Deno.open("./out/race.csv", openOption)
+const resultF = await Deno.open("./out/raceResult.csv", openOption);
+
+const raceWriter = new CSVWriter(raceF, csvOption)
+const resultWriter = new CSVWriter(resultF, csvOption);
+
+// Header行の書き込み
+writeHorseDataCsv(raceWriter, raceHeader)
+writeHorseDataCsv(resultWriter, raceResultHeader);
 
 for (const id of raceIds) {
   if (!id) continue;
 
   console.log(`processing raceId: ${id}`);
-  const result = await resultProcedure(id);
-  await writeHorseDataCsv(writer, result);
+  const [race, result] = await resultProcedure(id);
+
+  await writeHorseDataCsv(raceWriter, race)
+  await writeHorseDataCsv(resultWriter, result);
   await sleep(500);
 }
+
+console.log("process finished!")

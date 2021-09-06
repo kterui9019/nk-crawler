@@ -1,9 +1,30 @@
 import { assertEquals } from "https://deno.land/std@0.65.0/testing/asserts.ts";
-import { procedure } from "../src/result.ts";
+import { procedure, selectRace } from "../src/result.ts";
 
 Deno.test("指定したレースIDの結果が取得できる", async () => {
   const raceId = "202006010101";
-  const expected = [
+  const [raceExpected, resultExpected] = [[[
+    "202006010101",
+    "20200105",
+    "3歳未勝利",
+    "09:55",
+    "ダ1200m (右)",
+    "晴",
+    "良",
+    "1回",
+    "中山",
+    "1日目",
+    "サラ系３歳",
+    "未勝利",
+    "牝[指]",
+    "馬齢",
+    "16頭",
+    "510",
+    "200",
+    "130",
+    "77",
+    "51",
+  ]], [
     [
       "202006010101",
       "1",
@@ -292,8 +313,10 @@ Deno.test("指定したレースIDの結果が取得できる", async () => {
       "美浦佐藤",
       "482(+18)",
     ],
-  ];
+  ]];
 
-  const actual = await procedure(raceId);
-  assertEquals(actual, expected);
+  const [raceActual, resultActual] = await procedure(raceId);
+
+  assertEquals(raceActual, raceExpected);
+  assertEquals(resultActual, resultExpected);
 });
