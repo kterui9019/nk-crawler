@@ -30,3 +30,11 @@ export const fetchDom = async (url: string, encoding: string) => {
 
   return dom;
 };
+
+/**
+ * 指定したミリ秒だけ処理を待機します。
+ * 
+ * @param ms number
+ * @returns void
+ */
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

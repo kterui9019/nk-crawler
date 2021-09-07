@@ -1,9 +1,10 @@
 import { procedure as racelistProcedure } from "./racelist.ts";
 import { procedure as calendarProcedure } from "./calendar.ts";
+import { sleep } from "./util.ts"
 import {
-  raceResultHeader,
-  raceHeader,
   procedure as resultProcedure,
+  raceHeader,
+  raceResultHeader,
 } from "./result.ts";
 import { CSVWriter } from "https://deno.land/x/csv@v0.5.1/mod.ts";
 import { existsSync } from "https://deno.land/std/fs/mod.ts";
@@ -20,8 +21,6 @@ const writeHorseDataCsv = async (
   }
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 if (Deno.args.length !== 2) {
   throw new Error(
     "usage: deno run --allow-net --allow-write ./src/main.ts <year> <month>",
@@ -29,10 +28,6 @@ if (Deno.args.length !== 2) {
 }
 const year = Deno.args[0];
 const month = Deno.args[1];
-
-if (!existsSync(`./out/${year}${month}`)) {
-  Deno.mkdirSync(`./out/${year}${month}`);
-}
 
 const eventDates = await calendarProcedure(year, month);
 const raceIds = (await Promise.all(
@@ -43,22 +38,20 @@ const openOption = {
   write: true,
   create: true,
   truncate: true,
-}
+};
 
 const csvOption = {
   columnSeparator: ",",
   lineSeparator: "\r\n",
-}
+};
 // file書き込み準備
-const raceF = await Deno.open("./out/race.csv", openOption)
-const resultF = await Deno.open("./out/raceResult.csv", openOption);
+const raceF = await Deno.open(`./out/race${year}${month}.csv`, openOption);
+const resultF = await Deno.open(`./out/result${year}${month}.csv`, openOption);
 
-const raceWriter = new CSVWriter(raceF, csvOption)
+const raceWriter = new CSVWriter(raceF, csvOption);
 const resultWriter = new CSVWriter(resultF, csvOption);
 
 // Header行の書き込み
-writeHorseDataCsv(raceWriter, raceHeader)
-writeHorseDataCsv(resultWriter, raceResultHeader);
 
 for (const id of raceIds) {
   if (!id) continue;
@@ -66,9 +59,9 @@ for (const id of raceIds) {
   console.log(`processing raceId: ${id}`);
   const [race, result] = await resultProcedure(id);
 
-  await writeHorseDataCsv(raceWriter, race)
+  await writeHorseDataCsv(raceWriter, race);
   await writeHorseDataCsv(resultWriter, result);
-  await sleep(500);
+  await sleep(1000);
 }
 
-console.log("process finished!")
+console.log("process finished!");

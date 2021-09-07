@@ -11,6 +11,8 @@ export const selectors = {
       "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceData01",
     raceData2: () =>
       "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceData02",
+    horse: (idx: number) =>
+      `#All_Result_Table > tbody > tr:nth-child(${idx}) > td.Horse_Info > span > a`,
   },
   calendar: {
     eventDateAnchors: () =>
@@ -23,4 +25,8 @@ export const selectors = {
     race: (pIdx: number, rIdx: number) =>
       `#RaceTopRace > div > dl:nth-child(${pIdx}) > dd > ul > li:nth-child(${rIdx}) > a:first-child`,
   },
+  beforeResult: {
+    races: () => "#contents > div.db_main_race.fc > div > table > tbody > tr",
+    raceLink: (idx: number) => `#contents > div.db_main_race.fc > div > table > tbody > tr:nth-child(${idx}) > td:nth-child(5) > a`
+  }
 };
