@@ -110,10 +110,10 @@ export const selectRace = (
       )
     );
 
-  // 芝: 良, ダ: 良 -> 良良
+  // 芝: 良, ダ: 良 -> 良/良
   if (raceData1 && raceData1.length === 5) {
-    const going = raceData1[3] + raceData1[4];
-    raceData1.splice(4, 2, going);
+    const going = `${raceData1[3]}/${raceData1[4]}`;
+    raceData1.splice(3, 2, going);
   }
 
   // 芝1200m(右 外) -> 芝,1200,右 外
