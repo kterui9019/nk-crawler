@@ -1,12 +1,11 @@
 import { HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
-import { fetchDom, recurNode, sleep } from "./util.ts";
+import { fetchDom, recurNode } from "./util.ts";
 import { selectors } from "./selectors.ts";
-import { procedure as beforeResultProcedure } from "./beforeResult.ts";
 
-const selectBody = async (
+const selectBody =  (
   dom: HTMLDocument,
   raceId: string,
-): Promise<string[][]> => {
+): string[][] => {
   const results = dom.querySelectorAll(selectors.result.rows());
 
   const csv: string[][] = [];
@@ -76,12 +75,7 @@ const selectBody = async (
       row.splice(5, 1, sexAgeRegResult[1], sexAgeRegResult[2]);
     }
 
-    const beforeResults = await beforeResultProcedure(row[4], row[0]);
-    row.push(beforeResults.before1);
-    row.push(beforeResults.before2);
-
     csv.push(row);
-    sleep(1000);
   }
 
   return csv;
@@ -94,7 +88,7 @@ export const procedure = async (
     `https://race.netkeiba.com/race/result.html?race_id=${raceId}`,
     "euc-jp",
   );
-  return [selectRace(dom, raceId), (await selectBody(dom, raceId))];
+  return [selectRace(dom, raceId), selectBody(dom, raceId)];
 };
 
 export const selectRace = (
