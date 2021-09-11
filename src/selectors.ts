@@ -27,6 +27,7 @@ export const selectors = {
   },
   beforeResult: {
     races: () => "#contents > div.db_main_race.fc > div > table > tbody > tr",
-    raceLink: (idx: number) => `#contents > div.db_main_race.fc > div > table > tbody > tr:nth-child(${idx}) > td:nth-child(5) > a`
-  }
+    raceLink: (idx: number) =>
+      `#contents > div.db_main_race.fc > div > table > tbody > tr:nth-child(${idx}) > td:nth-child(5) > a`,
+  },
 };

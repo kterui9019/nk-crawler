@@ -1,17 +1,18 @@
-import {
-  HTMLDocument,
-} from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+import { HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 import { fetchDom, recurNode, sleep } from "./util.ts";
 import { selectors } from "./selectors.ts";
-import { procedure as beforeResultProcedure } from "./beforeResult.ts"
+import { procedure as beforeResultProcedure } from "./beforeResult.ts";
 
-const selectBody = async (dom: HTMLDocument, raceId: string): Promise<string[][]> => {
+const selectBody = async (
+  dom: HTMLDocument,
+  raceId: string,
+): Promise<string[][]> => {
   const results = dom.querySelectorAll(selectors.result.rows());
 
-  const csv: string[][] = []
+  const csv: string[][] = [];
 
   for (let idx = 0; idx < results.length; idx++) {
-    const row = [raceId] 
+    const row = [raceId];
     const tds = dom.querySelectorAll(selectors.result.cols(idx));
 
     for (let _idx = 0; _idx < tds.length; _idx++) {
@@ -19,19 +20,18 @@ const selectBody = async (dom: HTMLDocument, raceId: string): Promise<string[][]
         ? dom.querySelector(selectors.result.horse(idx + 1))?.attributes.href
           .substr(-10) || ""
         : recurNode(tds[_idx]).trim() || "";
-      row.push(element)
+      row.push(element);
     }
 
-    const beforeResults = await beforeResultProcedure(row[4], row[0])
-    row.push(beforeResults.before1)
-    row.push(beforeResults.before2)
+    const beforeResults = await beforeResultProcedure(row[4], row[0]);
+    row.push(beforeResults.before1);
+    row.push(beforeResults.before2);
 
-    csv.push(row)
+    csv.push(row);
     sleep(1000);
   }
 
-  return csv
-
+  return csv;
 };
 
 export const procedure = async (
@@ -65,15 +65,18 @@ export const selectRace = (
 
   // 芝: 良, ダ: 良 -> 良良
   if (raceData1 && raceData1.length === 5) {
-    const going = raceData1[3] + raceData1[4]
-    raceData1.splice(4,2,going)
+    const going = raceData1[3] + raceData1[4];
+    raceData1.splice(4, 2, going);
   }
 
   const raceData2 = dom
     .querySelector(selectors.result.raceData2())
     ?.textContent.split("\n")
     .map((el) =>
-      el.trim().replace("\n", "").replace("本賞金:", "").replace("万円", "")
+      el.trim().replace("\n", "").replace("本賞金:", "").replace("万円", "").replace(
+        "回",
+        "",
+      ).replace("頭", "").replace("日目", "")
     )
     .filter((el) => el !== "")
     .map((el) => el.split(","))

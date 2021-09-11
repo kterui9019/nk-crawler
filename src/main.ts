@@ -1,6 +1,6 @@
 import { procedure as racelistProcedure } from "./racelist.ts";
 import { procedure as calendarProcedure } from "./calendar.ts";
-import { sleep } from "./util.ts"
+import { sleep } from "./util.ts";
 import {
   procedure as resultProcedure,
   raceHeader,
