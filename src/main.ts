@@ -1,13 +1,8 @@
 import { procedure as racelistProcedure } from "./racelist.ts";
 import { procedure as calendarProcedure } from "./calendar.ts";
 import { sleep } from "./util.ts";
-import {
-  procedure as resultProcedure,
-  raceHeader,
-  raceResultHeader,
-} from "./result.ts";
+import { procedure as resultProcedure } from "./result.ts";
 import { CSVWriter } from "https://deno.land/x/csv@v0.5.1/mod.ts";
-import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 const writeHorseDataCsv = async (
   writer: CSVWriter,

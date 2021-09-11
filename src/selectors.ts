@@ -13,6 +13,10 @@ export const selectors = {
       "#page > div.RaceColumn01 > div > div.RaceMainColumn > div.RaceList_NameBox > div.RaceList_Item02 > div.RaceData02",
     horse: (idx: number) =>
       `#All_Result_Table > tbody > tr:nth-child(${idx}) > td.Horse_Info > span > a`,
+    jockey: (idx: number) =>
+      `#All_Result_Table > tbody > tr:nth-child(${idx}) > td.Jockey > a`,
+    trainer: (idx: number) =>
+      `#All_Result_Table > tbody > tr:nth-child(${idx}) > td.Trainer > a`,
   },
   calendar: {
     eventDateAnchors: () =>
