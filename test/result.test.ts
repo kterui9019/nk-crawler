@@ -242,3 +242,26 @@ Deno.test("記号がない場合は空文字で埋める", async () => {
 
   assertEquals(actual, expected);
 });
+
+Deno.test("芝ダート混合の場合は、馬場状態をつなげて1カラムにする", async () => {
+  const raceId = "201809010304"
+  const expected = [
+    [
+      "201809010304",   "20180303",
+      "4歳上障害未勝利",       "11:30",
+      "障2970m (芝 ダート)", "晴",
+      "良",              "良良",
+      "1回",             "阪神",
+      "3日目",            "障害４歳以上",
+      "未勝利",            "(混)",
+      "定量",             "14頭",
+      "780",            "310",
+      "200",            "120",
+      "78"
+    ]
+  ]
+
+  const [actual, _] = await procedure(raceId);
+
+  assertEquals(actual, expected);
+})

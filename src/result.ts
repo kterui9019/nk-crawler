@@ -1,52 +1,9 @@
 import {
-  Element,
   HTMLDocument,
 } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 import { fetchDom, recurNode, sleep } from "./util.ts";
 import { selectors } from "./selectors.ts";
 import { procedure as beforeResultProcedure } from "./beforeResult.ts"
-
-export const raceHeader = [[
-  "レースID",
-  "レース日",
-  "レース名",
-  "発走時刻",
-  "コース",
-  "天気",
-  "馬場",
-  "回数",
-  "会場",
-  "日数",
-  "条件",
-  "クラス",
-  "記号",
-  "負担重量",
-  "頭数",
-  "1位賞金",
-  "2位賞金",
-  "3位賞金",
-  "4位賞金",
-  "5位賞金",
-]];
-
-export const raceResultHeader = [[
-  "レースID",
-  "着順",
-  "枠",
-  "馬番",
-  "馬名",
-  "性齢",
-  "斤量",
-  "騎手",
-  "タイム",
-  "着差",
-  "人気",
-  "単勝オッズ",
-  "後3F",
-  "コーナー通過順",
-  "厩舎",
-  "馬体重(増減)",
-]];
 
 const selectBody = async (dom: HTMLDocument, raceId: string): Promise<string[][]> => {
   const results = dom.querySelectorAll(selectors.result.rows());
@@ -105,6 +62,12 @@ export const selectRace = (
         "",
       )
     );
+
+  // 芝: 良, ダ: 良 -> 良良
+  if (raceData1 && raceData1.length === 5) {
+    const going = raceData1[3] + raceData1[4]
+    raceData1.splice(4,2,going)
+  }
 
   const raceData2 = dom
     .querySelector(selectors.result.raceData2())
