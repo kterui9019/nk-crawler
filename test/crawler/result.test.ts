@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.65.0/testing/asserts.ts";
+import { assertEquals,assertArrayContains } from "https://deno.land/std@0.65.0/testing/asserts.ts";
 import { procedure } from "../src/result.ts";
 
 Deno.test("指定したレースIDの結果が取得できる", async () => {
@@ -208,7 +208,10 @@ Deno.test("指定したレースIDの結果が取得できる", async () => {
   const [raceActual, resultActual] = await procedure(raceId);
 
   assertEquals(raceActual, raceExpected);
-  assertEquals(resultActual, resultExpected);
+
+  // idがuuidなのでlength+containsでチェック
+  assertEquals(resultActual.length, 16)
+  assertArrayContains(resultActual.flat(1), resultExpected.flat(1));
 });
 
 Deno.test("記号がない場合は空文字で埋める", async () => {

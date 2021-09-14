@@ -1,3 +1,4 @@
+import { v4 } from "https://deno.land/std@0.106.0/uuid/mod.ts";
 import { HTMLDocument } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 import { fetchDom, recurNode } from "./util.ts";
 import { selectors } from "./selectors.ts";
@@ -11,7 +12,7 @@ const selectBody =  (
   const csv: string[][] = [];
 
   for (let idx = 0; idx < results.length; idx++) {
-    const row = [raceId];
+    const row = [crypto.randomUUID(), raceId];
     const tds = dom.querySelectorAll(selectors.result.cols(idx));
 
     for (let _idx = 0; _idx < tds.length; _idx++) {
@@ -36,17 +37,17 @@ const selectBody =  (
 
     // 整形
     // 着順が数字以外(失格、取消…etc)の場合は空文字にする
-    if (isNaN(Number(row[1]))) row.splice(1, 1, "");
+    if (isNaN(Number(row[2]))) row.splice(2, 1, "");
 
     // 斤量が数字以外の場合は空文字にする
-    if (isNaN(Number(row[6]))) row.splice(6, 1, "");
+    if (isNaN(Number(row[7]))) row.splice(7, 1, "");
 
     // カラム分割 indexが大きい順に処理しないとずれる
     // 重量を2カラムに分割する 458(+10) -> 458, 10
-    const weightRegResult = row[15].match(/([0-9]*)\((.*)\)/);
+    const weightRegResult = row[16].match(/([0-9]*)\((.*)\)/);
     if (weightRegResult) {
       row.splice(
-        15,
+        16,
         1,
         weightRegResult[1],
         weightRegResult[2].replace("+", ""),
@@ -54,12 +55,12 @@ const selectBody =  (
     }
 
     // タイムを秒数表記にする
-    const timeRegResult = row[8].match(/([0-9]):([0-9][0-9])\.([0-9])/);
+    const timeRegResult = row[9].match(/([0-9]):([0-9][0-9])\.([0-9])/);
     const toSecond = (minute: number, second: number, comma: number) =>
       minute * 60 + second + comma * 0.1;
     if (timeRegResult) {
       row.splice(
-        8,
+        9,
         1,
         toSecond(
           Number(timeRegResult[1]),
@@ -70,9 +71,9 @@ const selectBody =  (
     }
 
     // 性齢を2カラムに分割する 牝3 -> 牝, 3
-    const sexAgeRegResult = row[5].match(/(牡|牝|セ)([0-9])/);
+    const sexAgeRegResult = row[6].match(/(牡|牝|セ)([0-9])/);
     if (sexAgeRegResult) {
-      row.splice(5, 1, sexAgeRegResult[1], sexAgeRegResult[2]);
+      row.splice(6, 1, sexAgeRegResult[1], sexAgeRegResult[2]);
     }
 
     csv.push(row);

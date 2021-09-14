@@ -1,5 +1,5 @@
 #!/usr/bin/env zx
-const years = ["2020"];
+const years = ["2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019"];
 const months = [
   "01",
   "02",
@@ -32,7 +32,7 @@ if (!ls.includes("raceResult.csv")) {
 for (const y of years) {
   for (const m of months) {
     await ($
-      `deno run --allow-net --allow-write --allow-read --unstable ./src/main.ts ${y} ${m}`);
+      `deno run --allow-net --allow-write --allow-read --unstable ./src/crawler/main.ts ${y} ${m}`);
     await ($`cat ./out/race${y}${m}.csv >> ./out/race.csv`);
     await ($`cat ./out/result${y}${m}.csv >> ./out/raceResult.csv`);
     await ($`rm ./out/race${y}${m}.csv`);
