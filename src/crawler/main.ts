@@ -3,6 +3,7 @@ import { procedure as calendarProcedure } from "./calendar.ts";
 import { sleep } from "./util.ts";
 import { procedure as resultProcedure } from "./result.ts";
 import { CSVWriter } from "https://deno.land/x/csv@v0.5.1/mod.ts";
+import dayjs from 'https://cdn.skypack.dev/dayjs'; 
 
 const writeHorseDataCsv = async (
   writer: CSVWriter,
@@ -24,7 +25,12 @@ if (Deno.args.length !== 2) {
 const year = Deno.args[0];
 const month = Deno.args[1];
 
-const eventDates = await calendarProcedure(year, month);
+const today = Number(dayjs().locale('ja').format('YYYYMMDD'));
+
+// 今日より前のレースデータが取込対象
+const eventDates = (await calendarProcedure(year, month))
+  .filter((date: string) => Number(date) < today)
+
 const raceIds = (await Promise.all(
   eventDates.map(async (eventDate) => await racelistProcedure(eventDate)),
 )).flat(2);
