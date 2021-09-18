@@ -1,5 +1,0 @@
-(jdbc.main/create-race-history)
-(#'jdbc.main/create-race-history)
-#'jdbc.main/create-race-history
-(list)
-(doc reduce)

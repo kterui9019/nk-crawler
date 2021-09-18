@@ -1,0 +1,58 @@
+SELECT
+	rr.`order`,
+	rr.flame,
+	rr.sex,
+	rr.age,
+	rr.basis_weight,
+	rr.jockey_id,
+	rr.trainer_id,
+	rr.horse_weight,
+	rr.horse_weight_diff,
+	r.date,
+	r.start_time,
+	r.cource,
+	r.distance,
+	r.direction,
+	r.weather,
+	r.going,
+	r.round,
+	r.field,
+	r.day_round,
+	r.conditions,
+	r.`class`,
+	r.weight AS race_weight,
+	r.headage,
+	r.`1st_prize`,
+	rr2.`order` AS r2_order,
+	rr2.`time` AS r2_time,
+	rr2.flame AS r2_flame,
+	rr2.furlong AS r2_furlong,
+	rr2.basis_weight AS r2_basis_weight,
+	rr2.jockey_id AS r2_jockey_id,
+	rr2.trainer_id AS r2_trainer_id,
+	rr2.horse_weight AS r2_horse_weight,
+	r2.`date` AS r2_date,
+	r2.`name` AS r2_name,
+	r2.start_time AS r2_start_time,
+	r2.cource AS r2_cource,
+	r2.distance AS r2_distance,
+	r2.direction AS r2_direction,
+	r2.weather AS r2_weather,
+	r2.going AS r2_going,
+	r2.round AS r2_round,
+	r2.field AS r2_field,
+	r2.day_round AS r2_day_round,
+	r2.conditions AS r2_conditions,
+	r2.`class` AS r2_class,
+	r2.weight AS r2_race_weight,
+	r2.headage AS r2_headage,
+	r2.`1st_prize` AS r2_1st_prize,
+	DATEDIFF(r.date, r2.date) AS date_diff
+FROM
+	raceResult rr
+	INNER JOIN race r ON rr.race_id = r.id
+	INNER JOIN horseRaceHistory h1 ON rr.horse_id = h1.horse_id
+		AND rr.race_id = h1.race_id
+	INNER JOIN race r2 ON h1.before_race_id = r2.id
+	INNER JOIN raceResult rr2 ON h1.before_race_id = rr2.race_id
+		AND h1.horse_id = rr2.horse_id
