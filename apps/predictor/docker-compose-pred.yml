@@ -2,6 +2,7 @@ version: '3'
 services:
   python3:
     build: .
+    command: python /root/src/predict.py
     container_name: 'python3'
     volumes:
       - ./src:/root/src

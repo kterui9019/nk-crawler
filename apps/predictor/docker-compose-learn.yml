@@ -1,0 +1,8 @@
+version: '3'
+services:
+  python3:
+    build: .
+    command: python /root/src/learn.py
+    container_name: 'python3'
+    volumes:
+      - ./src:/root/src

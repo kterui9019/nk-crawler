@@ -18,6 +18,17 @@ export const selectors = {
     trainer: (idx: number) =>
       `#All_Result_Table > tbody > tr:nth-child(${idx}) > td.Trainer > a`,
   },
+  shutuba: {
+    rows: () => "#page > div.RaceColumn02 > div.RaceTableArea > table > tbody > tr",
+    cols: (row: number) =>
+      `#page > div.RaceColumn02 > div.RaceTableArea > table > tbody > tr:nth-child(${row + 1}) > td`,
+    horse: (idx: number) =>
+      `#page > div.RaceColumn02 > div.RaceTableArea > table > tbody > tr:nth-child(${idx}) > td.HorseInfo > div > div > span > a`,
+    jockey: (idx: number) =>
+      `#page > div.RaceColumn02 > div.RaceTableArea > table > tbody > tr:nth-child(${idx}) > td.Jockey > a`,
+    trainer: (idx: number) =>
+      `#page > div.RaceColumn02 > div.RaceTableArea > table > tbody > tr:nth-child(${idx}) > td.Trainer > a`,
+  },
   calendar: {
     eventDateAnchors: () =>
       "#Netkeiba_RaceTop > div.Wrap.fc > div > div.Main_Column > div.Race_Calendar_Inner > div > div.Race_Calendar_Main > table > tbody > tr > td > a",
@@ -33,5 +44,7 @@ export const selectors = {
     races: () => "#contents > div.db_main_race.fc > div > table > tbody > tr",
     raceLink: (idx: number) =>
       `#contents > div.db_main_race.fc > div > table > tbody > tr:nth-child(${idx}) > td:nth-child(5) > a`,
+    latestRaceLink: () =>
+      `#contents > div.db_main_race.fc > div > table > tbody > tr:nth-child(1) > td:nth-child(5) > a`
   },
 };
